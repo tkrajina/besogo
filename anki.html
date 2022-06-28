@@ -50,11 +50,18 @@
         div = document.getElementById('target'),
         params = new URLSearchParams(window.location.search);
     
-    if (!params.get("sgf")) {
+    let sgf = params.get("sgf");
+    if (!sgf) {
         alert("Missing sgf");
         return;
     }
-    options.sgf = !params.get("sgf");
+
+    if (!sgf.replace(/[\s\n]+/g, "").trim().startsWith("(;")) {
+        sgf = sgf.replace("(", "(;");
+    }
+
+    options.sgf = sgf.trim();
+    console.log(sgf)
 
     besogo.create(div, options);
 
