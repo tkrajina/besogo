@@ -52,6 +52,10 @@ besogo.create = function(container, options) {
         editor.SHADOWS = (options.shadows && options.shadows !== 'auto');
     }
 
+    if (options.hideVariants) {
+        editor.toggleVariantStyle(false);
+    }
+
     if (!options.nokeys) { // Add keypress handler unless nokeys option is truthy
         addKeypressHandler(container, editor);
     }
