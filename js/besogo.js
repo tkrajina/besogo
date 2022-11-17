@@ -53,7 +53,7 @@ besogo.create = function(container, options) {
     }
 
     if (options.hideVariants) {
-        editor.toggleVariantStyle(false);
+        editor.setVariantStyle(2);
     }
 
     if (!options.nokeys) { // Add keypress handler unless nokeys option is truthy
