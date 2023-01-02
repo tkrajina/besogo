@@ -1,4 +1,4 @@
-besogo.makeFilePanel = function(container, editor) {
+besogo.makeFilePanel = function(container, editor, options) {
     'use strict';
     var fileChooser, // Reference to the file chooser element
         element, // Scratch variable for creating elements
@@ -35,6 +35,41 @@ besogo.makeFilePanel = function(container, editor) {
         }
     };
     container.appendChild(element);
+
+    if (options.share) {
+        // Share button
+        element = document.createElement('input');
+        element.type = 'button';
+        element.value = 'Copy URL';
+        element.title = 'EditedSGF';
+        element.onclick = function() {
+            let url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?sgf=" + besogo.composeSgf(editor);
+            navigator.clipboard.writeText(url).then(() => {
+                if (window.confirm(`Copied URL to clipboard, open it in a new tab?`)) {
+                    window.open(url, '_blank');
+                }
+            }, err => {
+                alert(`Failed to copy: ${err}`);
+            });
+        };
+        container.appendChild(element);
+    }
+    if (options.copySgf) {
+        // Share button
+        element = document.createElement('input');
+        element.type = 'button';
+        element.value = 'Copy SGF';
+        element.title = 'CopySGF';
+        element.onclick = function() {
+            let sgf = besogo.composeSgf(editor);
+            navigator.clipboard.writeText(sgf).then(() => {
+                alert(`Copied ${sgf.length} bytes to clipboard`);
+            }, err => {
+                alert(`Failed to copy: ${err}`);
+            });
+        };
+        container.appendChild(element);
+    }
 
 
     // Makes a new board button

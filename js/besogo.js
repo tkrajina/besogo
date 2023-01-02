@@ -25,6 +25,8 @@ besogo.create = function(container, options) {
     options = options || {}; // Makes option checking simpler
     options.size = besogo.parseSize(options.size || 19);
     options.coord = options.coord || 'none';
+    options.share = options.share || false;
+    options.copySgf = options.copySgf || false;
     options.tool = options.tool || 'auto';
     if (options.panels === '') {
         options.panels = [];
@@ -103,7 +105,7 @@ besogo.create = function(container, options) {
         for (i = 0; i < options.panels.length; i++) {
             panelName = options.panels[i];
             if (makers[panelName]) { // Only add if creator function exists
-                makers[panelName](makeDiv('besogo-' + panelName, panelsDiv), editor);
+                makers[panelName](makeDiv('besogo-' + panelName, panelsDiv), editor, options);
             }
         }
         if (!panelsDiv.firstChild) { // If no panels were added
