@@ -79,6 +79,13 @@ besogo.makeFilePanel = function(container, editor, options) {
         element.title = 'PasteSGF';
         element.onclick = function() {
             navigator.clipboard.readText().then((sgf) => {
+                if (!sgf) {
+                    alert("Clipboard empty");
+                    return;
+                }
+                if (!window.confirm(`Paste ${sgf.length} bytes and overwrite current board?`)) {
+                    return;
+                }
                 try {
                     sgf = besogo.parseSgf(sgf);
                 } catch (error) {
