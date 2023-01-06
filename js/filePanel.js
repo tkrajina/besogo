@@ -4,10 +4,12 @@ besogo.makeFilePanel = function(container, editor, options) {
         element, // Scratch variable for creating elements
         WARNING = "Everything not saved will be lost";
 
-    makeNewBoardButton(9); // New 9x9 board button
-    makeNewBoardButton(13); // New 13x13 board button
-    makeNewBoardButton(19); // New 19x19 board button
-    makeNewBoardButton('?'); // New custom board button
+    if (!options.share) {
+        makeNewBoardButton(9); // New 9x9 board button
+        makeNewBoardButton(13); // New 13x13 board button
+        makeNewBoardButton(19); // New 19x19 board button
+        makeNewBoardButton('?'); // New custom board button
+    }
 
     // Hidden file chooser element
     fileChooser = makeFileChooser();
