@@ -65,7 +65,7 @@
 
     if (!sgf) {
         alert("Missing sgf query param");
-        return;
+        sgf = "(;)";
     }
 
     if (!sgf.replace(/[\s\n]+/g, "").trim().startsWith("(;")) {
