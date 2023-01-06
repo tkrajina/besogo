@@ -71,6 +71,31 @@ besogo.makeFilePanel = function(container, editor, options) {
             });
         };
         container.appendChild(element);
+
+        // Share button
+        element = document.createElement('input');
+        element.type = 'button';
+        element.value = 'Paste SGF';
+        element.title = 'PasteSGF';
+        element.onclick = function() {
+            navigator.clipboard.readText().then((sgf) => {
+                try {
+                    sgf = besogo.parseSgf(sgf);
+                } catch (error) {
+                    alert('SGF parse error at ' + error.at + ':\n' + error.message);
+                    return;
+                }
+                try {
+                    besogo.loadSgf(sgf, editor);
+                } catch (e) {
+                    console.error(e);
+                    alert("Error loading/parsing the SGF");
+                }
+            }, err => {
+                alert(`Failed to copy: ${err}`);
+            });
+        };
+        container.appendChild(element);
     }
 
 
