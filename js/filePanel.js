@@ -45,7 +45,7 @@ besogo.makeFilePanel = function(container, editor, options) {
         element.value = 'Copy URL';
         element.title = 'EditedSGF';
         element.onclick = function() {
-            let url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?sgf=" + besogo.composeSgf(editor);
+            let url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?sgf=" + encodeURI(besogo.composeSgf(editor));
             navigator.clipboard.writeText(url).then(() => {
                 if (window.confirm(`Copied URL to clipboard, open it in a new tab?`)) {
                     window.open(url, '_blank');
