@@ -45,10 +45,12 @@ besogo.makeFilePanel = function(container, editor, options) {
         element.value = 'Copy URL';
         element.title = 'EditedSGF';
         element.onclick = function() {
-            let url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?sgf=" + encodeURI(besogo.composeSgf(editor));
+            let sgf = besogo.composeSgf(editor);
+            let url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?sgf=" + encodeURI(sgf);
             navigator.clipboard.writeText(url).then(() => {
-                if (window.confirm(`Copied URL to clipboard, open it in a new tab?`)) {
-                    window.open(url, '_blank');
+                if (window.confirm(`Copied URL to clipboard, shorten the URL?`)) {
+                    let tinyurl = "https://tinyurl.com/create.php?url=https://tkrajina.github.io/besogo/share.html?sgf=" + sgf;
+                    window.open(tinyurl);
                 }
             }, err => {
                 alert(`Failed to copy: ${err}`);
