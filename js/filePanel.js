@@ -24,14 +24,16 @@ besogo.makeFilePanel = function(container, editor) {
     container.appendChild(element);
 
     // Save file button
+    let currentName = 'export.sgf'; // Reference to the current file name.
     element = document.createElement('input');
     element.type = 'button';
     element.value = 'Save';
     element.title = 'Export SGF';
     element.onclick = function() {
-        var fileName = prompt('Save file as', 'export.sgf');
+        var fileName = prompt('Save file as', currentName);
         if (fileName) { // Canceled or empty string does nothing
             saveFile(fileName, besogo.composeSgf(editor));
+            currentName = fileName;
         }
     };
     container.appendChild(element);
@@ -94,6 +96,7 @@ besogo.makeFilePanel = function(container, editor) {
             besogo.loadSgf(sgf, editor);
         };
         if (confirm("Load '" + file.name + "'?\n" + WARNING)) {
+            currentName = file.name; // Use the file name for the next save
             reader.readAsText(file); // Initiate file read
         }
     }
