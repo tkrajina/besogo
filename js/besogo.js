@@ -14,7 +14,7 @@ besogo.create = function(container, options) {
             comment: besogo.makeCommentPanel,
             tool: besogo.makeToolPanel,
             tree: besogo.makeTreePanel,
-            file: besogo.makeFilePanel
+            file: besogo.makeFilePanel,
         },
         insideText = container.textContent || container.innerText || '',
         i, panelName; // Scratch iteration variables
