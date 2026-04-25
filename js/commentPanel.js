@@ -6,9 +6,9 @@ besogo.makeCommentPanel = function(container, editor) {
         commentBox = document.createElement('div'),
         commentEdit = document.createElement('textarea'),
         playerInfoOrder = 'PW WR WT PB BR BT'.split(' '),
-        infoOrder = 'HA KM RU TM OT GN EV PC RO DT RE ON GC AN US SO CP'.split(' '),
+        infoOrder = 'PL HA KM RU TM OT GN EV PC RO DT RE ON GC AN US SO CP'.split(' '),
         infoIds = {
-            PL: 'Next move',
+            PL: 'First to move',
             PW: 'White Player',
             WR: 'White Rank',
             WT: 'White Team',
@@ -103,7 +103,12 @@ besogo.makeCommentPanel = function(container, editor) {
                 row.appendChild(cell);
 
                 cell = document.createElement('td');
-                text = document.createTextNode(gameInfo[id]);
+                if (id === 'PL') {
+                    // Display readable text for Next move
+                    text = document.createTextNode(gameInfo[id] === 'W' ? 'White to play' : 'Black to play');
+                } else {
+                    text = document.createTextNode(gameInfo[id]);
+                }
                 cell.appendChild(text);
                 row.appendChild(cell);
             }
@@ -131,19 +136,45 @@ besogo.makeCommentPanel = function(container, editor) {
             row.appendChild(cell);
 
             cell = document.createElement('td');
-            text = document.createElement('input');
-            if (gameInfo[id]) {
-                text.value = gameInfo[id];
+            if (id === 'PL') {
+                // Create dropdown for Next move (PL) property
+                text = document.createElement('select');
+                var optionB = document.createElement('option');
+                optionB.value = 'B';
+                optionB.text = 'Black to play';
+                var optionW = document.createElement('option');
+                optionW.value = 'W';
+                optionW.text = 'White to play';
+                text.appendChild(optionB);
+                text.appendChild(optionW);
+                // Set current value (default to 'B' if not set)
+                text.value = gameInfo[id] || 'B';
+                text.onchange = function(t, id) {
+                    return function() { // Commit change on change
+                        editor.setGameInfo(t.value, id);
+                    };
+                }(text, id);
+                // Stop keydown propagation when in focus
+                text.addEventListener('keydown', function(evt) {
+                    evt = evt || window.event;
+                    evt.stopPropagation();
+                });
+            } else {
+                // Standard text input for other properties
+                text = document.createElement('input');
+                if (gameInfo[id]) {
+                    text.value = gameInfo[id];
+                }
+                text.onblur = function(t, id) {
+                    return function() { // Commit change on blur
+                        editor.setGameInfo(t.value, id);
+                    };
+                }(text, id);
+                text.addEventListener('keydown', function(evt) {
+                    evt = evt || window.event;
+                    evt.stopPropagation(); // Stop keydown propagation when in focus
+                });
             }
-            text.onblur = function(t, id) {
-                return function() { // Commit change on blur
-                    editor.setGameInfo(t.value, id);
-                };
-            }(text, id);
-            text.addEventListener('keydown', function(evt) {
-                evt = evt || window.event;
-                evt.stopPropagation(); // Stop keydown propagation when in focus
-            });
             cell.appendChild(text);
             row.appendChild(cell);
         }
@@ -168,7 +199,7 @@ besogo.makeCommentPanel = function(container, editor) {
 
         button.onclick = function() {
             if (gameInfoTable.style.display === 'none' && gameInfoTable.firstChild) {
-                gameInfoTable.style.display = 'table';
+                table.style.display = 'table';
             } else {
                 gameInfoTable.style.display = 'none';
             }
@@ -214,4 +245,4 @@ besogo.makeCommentPanel = function(container, editor) {
         return button;
     }
 
-};
+}

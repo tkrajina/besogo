@@ -157,6 +157,12 @@ besogo.makeEditor = function(sizeX, sizeY) {
     function setGameInfo(info, id) {
         if (id) {
             gameInfo[id] = info;
+            // Sync PL property with board state
+            if (id === 'PL') {
+                current.lastMove = (info === 'W') ? -1 : 1;
+                notifyListeners({ gameInfo: gameInfo, stoneChange: true });
+                return;
+            }
         } else {
             gameInfo = info;
         }
@@ -440,6 +446,10 @@ besogo.makeEditor = function(sizeX, sizeY) {
         // Check if current node is immutable or root
         if ( !current.isMutable('move') || !current.parent ) {
             next = current.makeChild(); // Create a new child node
+            // If auto-detecting color and at root with PL set, use root's lastMove
+            if (color === 0 && !current.parent && current.lastMove !== 0) {
+                color = -current.lastMove; // Convert lastMove to color: 1 -> -1 (Black), -1 -> 1 (White)
+            }
             if (next.playMove(i, j, color, allowAll)) { // Play in new node
                 // Keep (add to game state tree) only if move succeeds
                 current.addChild(next);
