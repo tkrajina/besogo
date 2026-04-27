@@ -37,9 +37,11 @@ besogo.loadSgf = function(sgf, editor) {
         switch(prop.id) {
             case 'PL': // Next to play
                 if (prop.values[0] == "B") {
-                    node.lastMove = 1
+                    node.lastMove = 1;
+                    editor.setGameInfo('B', 'PL');
                 } else if (prop.values[0] == "W") {
-                    node.lastMove = -1
+                    node.lastMove = -1;
+                    editor.setGameInfo('W', 'PL');
                 }
                 break;
             case 'B': // Play a black move
